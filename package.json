@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.170.0",
+    "nodemailer": "^4.4.1",
+    "serverless": "^1.25.0"
+  },
+  "devDependencies": {
+    "aws-lambda-local": "^1.0.15"
+  }
+}
