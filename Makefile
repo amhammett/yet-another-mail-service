@@ -5,9 +5,15 @@ env := missing
 profile := sms-dev
 region := us-west-2
 stage := v1
+vpc_env := dev
+
 
 AWS_PARAMS=AWS_PROFILE=$(profile) AWS_DEFAULT_REGION=${region}
-LAMBDA_PARAMS=ENV=${env} SMTP_HOST=${smtp_host} SMTP_PORT=${smtp_port} VPC_ID=${vpc_id} VPC_SUBNETS="${vpc_subnets}" VPC_SECURITY_GROUP="${vpc_sg}"
+
+vpc_id := $(shell ${AWS_PARAMS} aws ec2 describe-vpcs --filters "Name=tag:Environment,Values=${vpc_env}" --query Vpcs[0].VpcId --output text)
+subnet_ids := $(shell ${AWS_PARAMS} aws ec2 describe-subnets --filters "Name=vpc-id,Values=${vpc_id}" --query Subnets[*].SubnetId --output text)
+
+LAMBDA_PARAMS=ENV=${env} SMTP_HOST=${smtp_host} SMTP_PORT=${smtp_port} VPC_ID=${vpc_id} VPC_SUBNETS="${subnet_ids}"
 
 local-invoke:
 	${AWS_PARAMS} ${LAMBDA_PARAMS} ./node_modules/.bin/lambda-local -t 20 -f $(function_file) -e $(event_file)
