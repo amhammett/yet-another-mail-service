@@ -3,12 +3,11 @@ function_name = yams
 
 env := missing
 profile := sms-dev
-region := us-east-1
+region := us-west-2
 stage := v1
-allow_cidr := x.x.x.x
 
 AWS_PARAMS=AWS_PROFILE=$(profile) AWS_DEFAULT_REGION=${region}
-LAMBDA_PARAMS=ALLOW_CIDR="$(allow_cidr)" ENV=${env} SMTP_HOST=${smtp_host} SMTP_PORT=${smtp_port}
+LAMBDA_PARAMS=ENV=${env} SMTP_HOST=${smtp_host} SMTP_PORT=${smtp_port} VPC_ID=${vpc_id} VPC_SUBNETS="${vpc_subnets}" VPC_SECURITY_GROUP="${vpc_sg}"
 
 local-invoke:
 	${AWS_PARAMS} ${LAMBDA_PARAMS} ./node_modules/.bin/lambda-local -t 20 -f $(function_file) -e $(event_file)
