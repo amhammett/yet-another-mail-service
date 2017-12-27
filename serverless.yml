@@ -30,17 +30,17 @@ functions:
     handler: src/send.send
     events:
       - stream:
-          type:             kinesis
-          arn:              { Fn::GetAtt: [ KinesisStream, Arn ] }
-          batchSize:        100
+          type: kinesis
+          arn: { Fn::GetAtt: [ KinesisStream, Arn ] }
+          batchSize: 100
           startingPosition: TRIM_HORIZON
 
 resources:
   Resources:
     KinesisStream:
-      Type: 'AWS::Kinesis::Stream'
+      Type: AWS::Kinesis::Stream
       Properties:
-        Name:       "yams-${env:ENV}-send"
+        Name: "yams-${env:ENV}-send"
         ShardCount: 1
     lambdaVpcSecurityGroup:
       Type: 'AWS::EC2::SecurityGroup'
