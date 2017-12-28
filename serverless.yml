@@ -6,7 +6,7 @@ provider:
   region:     ${env:AWS_DEFAULT_REGION, 'us-west-2'}
   stage:      ${opt:stage}
   memorySize: 512
-  timeout:    6
+  timeout:    4
 
   environment:
     SMTP_HOST: "${env:SMTP_HOST}"
@@ -32,7 +32,7 @@ functions:
       - stream:
           type: kinesis
           arn: { Fn::GetAtt: [ KinesisStream, Arn ] }
-          batchSize: 100
+          batchSize: 10
           startingPosition: TRIM_HORIZON
 
 resources:
@@ -51,8 +51,8 @@ resources:
         SecurityGroupIngress:
           - IpProtocol: tcp
             CidrIp:     0.0.0.0/0
-            FromPort:   "${env:SMTP_PORT}"
-            ToPort:     "${env:SMTP_PORT}"
+            FromPort:   "${self:provider.environment.SMTP_PORT}"
+            ToPort:     "${self:provider.environment.SMTP_PORT}"
     lambdaVpcRole:
       Type: 'AWS::IAM::Role'
       Properties:
