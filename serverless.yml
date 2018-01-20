@@ -1,12 +1,13 @@
 service: "yams-${env:ENV}"
 
 provider:
-  name:       aws
-  runtime:    nodejs6.10
-  region:     ${env:AWS_DEFAULT_REGION, 'us-west-2'}
-  stage:      ${opt:stage}
-  memorySize: 512
-  timeout:    4
+  name:               aws
+  runtime:            nodejs6.10
+  region:             ${env:AWS_DEFAULT_REGION, 'us-west-2'}
+  stage:              ${opt:stage}
+  logRetentionInDays: 7
+  memorySize:         512
+  timeout:            2
 
   environment:
     SMTP_HOST: "${env:SMTP_HOST}"
@@ -32,7 +33,7 @@ functions:
       - stream:
           type: kinesis
           arn: { Fn::GetAtt: [ KinesisStream, Arn ] }
-          batchSize: 10
+          batchSize: 1
           startingPosition: TRIM_HORIZON
 
 resources:
