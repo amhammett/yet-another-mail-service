@@ -1,21 +1,17 @@
 'use strict';
 
 module.exports.send = (event, context, callback) => {
-  console.log('event')
-  console.log(event)
-  const nodemailer = require('nodemailer');
-  let smtpTransport = require('nodemailer-smtp-transport');
-
   event.Records.forEach(function(record) {
-    console.log('record')
-    console.log(record)
+    const nodemailer = require('nodemailer');
+    const smtpTransport = require('nodemailer-smtp-transport');
+
     console.log('processing mail record')
 
     let transporter = nodemailer.createTransport(
       smtpTransport({
-        host: process.env.SMTP_HOST || 'mail.host.com',
-        port: process.env.SMTP_PORT || 587,
-        secure: false
+        host:   process.env.SMTP_HOST   || 'mail.host.com',
+        port:   process.env.SMTP_PORT   || 587,
+        secure: process.env.SMTP_SECURE || false
       })
     );
 
@@ -25,11 +21,11 @@ module.exports.send = (event, context, callback) => {
 
     transporter.sendMail(message, function(error, info) {
       if (error) {
-        console.log(error);
+        console.error(error);
         context.fail(error, 'failed')
       } else {
         console.log('Message sent: '+ info.response);
-        context.succeed(null, 'Completed')
+        context.succeed()
       }
       transporter.close()
     });
