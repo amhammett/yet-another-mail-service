@@ -1,7 +1,9 @@
 'use strict';
 
 module.exports.send = (event, context, callback) => {
+  // console.log(event)
   event.Records.forEach(function(record) {
+    // console.log(record)
     const nodemailer = require('nodemailer');
     const smtpTransport = require('nodemailer-smtp-transport');
 
@@ -16,8 +18,9 @@ module.exports.send = (event, context, callback) => {
     );
 
     let record_data = new Buffer((record.kinesis.data), 'base64').toString("ascii");
+    // console.log(record_data)
     let message = JSON.parse(record_data)
-    console.log(message)
+    // console.log(message)
 
     transporter.sendMail(message, function(error, info) {
       if (error) {
