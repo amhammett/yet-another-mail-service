@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "aws-sdk": "^2.170.0",
+    "aws-sdk": "^2.814.0",
     "nodemailer": "^4.4.1",
     "nodemailer-smtp-transport": "^2.7.4",
     "serverless": "^1.25.0",
